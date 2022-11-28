@@ -1,15 +1,67 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
+// import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-
+// import { RootTabScreenProps } from '../types';
+import { gql,useQuery } from '@apollo/client';
+import BookItem from '../components/BookItem';
+const query = gql`
+  query SearchBooks($q: String) {
+    googleBooksSearch(q: $q, country: "US") {
+      items {
+        id
+        volumeInfo {
+          authors
+          averageRating
+          description
+          imageLinks {
+            thumbnail
+          }
+          title
+          subtitle
+          industryIdentifiers {
+            identifier
+            type
+          }
+        }
+      }
+    }
+    openLibrarySearch(q: $q) {
+      docs {
+        author_name
+        title
+        cover_edition_key
+        isbn
+      }
+    }
+  }
+`;
 export default function TabOneScreen() {
+  const {data,loading,error}=useQuery(query,{variables:{q:"React Native"},});
+  // console.log(data);
+  // console.log(loading);
+  // console.log(error);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello world</Text>
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
+      {
+        loading && <ActivityIndicator/>
+      }
+      {
+        error &&
+        <>
+          <Text>Error in fetching try searching.....</Text>
+          <Text>{error.message}</Text>
+        </>
+      }
+      <FlatList data={data?.googleBooksSearch?.items || []}
+      renderItem={({item})=>(<BookItem book={{
+        image: item.volumeInfo.imageLinks?.thumbnail,
+        title: item.volumeInfo.title,
+        authors: item.volumeInfo.authors,
+        isbn:item.volumeInfo.industryIdentifiers[0].identifier,}}/>)}
+      
+      />
+      
     </View>
   );
 }
@@ -17,11 +69,12 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    padding:10
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   separator: {
