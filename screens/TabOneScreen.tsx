@@ -2,9 +2,14 @@ import { StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 
 // import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+
 // import { RootTabScreenProps } from '../types';
 import { gql,useQuery } from '@apollo/client';
 import BookItem from '../components/BookItem';
+//  useQuery is used get data The useQuery hook is a React hook that shares GraphQL data with your UI.
+ 
+
+// the query is defined with using gql eg below 
 const query = gql`
   query SearchBooks($q: String) {
     googleBooksSearch(q: $q, country: "US") {
@@ -26,6 +31,8 @@ const query = gql`
         }
       }
     }
+
+
     openLibrarySearch(q: $q) {
       docs {
         author_name
@@ -36,6 +43,9 @@ const query = gql`
     }
   }
 `;
+//q:$q the string is accepted by stepzen 
+
+// flatlist is used to render the array of elements  its like map function 
 export default function TabOneScreen() {
   const {data,loading,error}=useQuery(query,{variables:{q:"React Native"},});
   // console.log(data);
