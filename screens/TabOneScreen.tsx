@@ -1,4 +1,4 @@
-import { StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { StyleSheet,ActivityIndicator,FlatList, Appearance } from 'react-native';
 
 // import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -43,19 +43,46 @@ const query = gql`
     }
   }
 `;
+
+
 //q:$q the string is accepted by stepzen 
 
 // flatlist is used to render the array of elements  its like map function 
+
+
 export default function TabOneScreen() {
   const {data,loading,error}=useQuery(query,{variables:{q:"React Native"},});
   // console.log(data);
   // console.log(loading);
   // console.log(error);
+
+  // data error and loading is used to get data and its status -> useQuery(queryhave to pass variables bcz we are passing string to stepzen api as search query)
+//   Whenever this component renders, the useQuery hook automatically executes our query and returns a result object containing loading, error, and data properties:
+
+// Apollo Client automatically tracks a query's loading and error states, which are reflected in the loading and error properties.
+// When the result of your query comes back, it's attached to the data property.
+const istheme=()=>{
+  const colorScheme=Appearance.getColorScheme();
+  if(colorScheme==="dark")
+  {
+
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
   return (
     <View style={styles.container}>
       {
-        loading && <ActivityIndicator/>
+        loading && <ActivityIndicator size="large" color={
+          istheme()?"white":"blue"
+        }style={styles.indicator}
+           />
       }
+      {/* above shows if its loading show activityindicator -> loading circle  */}
       {
         error &&
         <>
@@ -92,4 +119,9 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  indicator:{
+    alignContent:"center",
+    justifyContent:"center",
+    alignItems:"center"
+  }
 });
