@@ -3,8 +3,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
+import MyBooksProvider from "./context/MyBooksProvider";
 import Navigation from './navigation';
-
 //stepzen api creates gaphql inorder to fetch from google books api and open book api mananges both 
 // Apollo Client is a comprehensive state management library for JavaScript that enables you to manage
 //  both local and remote data with GraphQL. Use it to fetch, cache, and modify application data, all while automatically updating your UI.
@@ -38,7 +38,11 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <ApolloProvider client={client}>
+          <MyBooksProvider>
+
+
         <Navigation colorScheme={colorScheme} />
+          </MyBooksProvider>
         </ApolloProvider>
         <StatusBar />
       </SafeAreaProvider>

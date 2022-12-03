@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Image,Appearance} from "react-native";
+import { View, Text, StyleSheet, Image,Appearance,Pressable} from "react-native";
 import React from "react";
 import Colors from '../constants/Colors';
 import App from "../App";
-
+import {useMyBooks} from "../context/MyBooksProvider"
 
 type BookItemProps = {
   book: Book;
@@ -11,7 +11,8 @@ type BookItemProps = {
 
 
 const BookItem = ({ book }: BookItemProps) => {
-
+  const { onToggleSaved, isBookSaved } = useMyBooks();
+  const saved = isBookSaved(book);
   const istheme=()=>{
     const colorScheme=Appearance.getColorScheme();
     if(colorScheme==="dark")
@@ -40,6 +41,16 @@ const BookItem = ({ book }: BookItemProps) => {
         
         >{book.title}</Text>
         <Text style={{color:"gray",fontWeight:"bold",fontStyle:"italic"}}>by {book.authors?.join(", ")}</Text>
+        <Pressable
+        style={[styles.button, saved ? { backgroundColor: 'lightgray' } : {}]}
+       onPress={() => onToggleSaved(book)}
+
+        >
+      <Text style={[styles.buttonText,
+      saved ? {color:"black"}:{color:"white"}]
+        
+      }>{saved ? 'Remove' : 'Want to Read'}</Text>
+    </Pressable>
       </View>
     </View>
   );
@@ -71,6 +82,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     
+  },
+  button:{
+    backgroundColor:"#0c7ee9",
+   width:"40%",
+   padding:5,
+   marginTop:15,
+   marginBottom:3,
+   borderWidth:1,
+   borderColor:"white",
+   borderRadius:5
+  },
+  buttonText:{
+    fontSize:15,
+    // color:"white"
+    // fontWeight:"bold"
   },
 });
 
