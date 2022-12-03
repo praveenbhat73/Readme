@@ -1,14 +1,17 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,FlatList } from 'react-native';
 import { useMyBooks } from '../context/MyBooksProvider';
-
+import BookItem from '../components/BookItem';
 import {View } from '../components/Themed';
 
 export default function TabTwoScreen() {
-  const context=useMyBooks()
-  console.log(context)
+  const {savedBooks}=useMyBooks()
+  
   return (
     <View style={styles.container}>
-      
+       <FlatList
+        data={savedBooks}
+        renderItem={({ item }) => <BookItem book={item} />}
+      />
     </View>
   );
 }
@@ -16,16 +19,9 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+  
     justifyContent: 'center',
+    padding:9,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+ 
 });
