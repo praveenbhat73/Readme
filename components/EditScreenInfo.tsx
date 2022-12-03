@@ -10,10 +10,10 @@ export default function EditScreenInfo({ path }: { path: string }) {
     <View>
       <View style={styles.getStartedContainer}>
         <Text
-          style={styles.getStartedText}
+          style={styles.getStartedText1}
           lightColor="rgba(0,0,0,0.8)"
           darkColor="rgba(255,255,255,0.8)">
-          Open up the code for this screen:
+          Readme App
         </Text>
 
         <View
@@ -60,10 +60,17 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     paddingHorizontal: 4,
   },
+  getStartedText1:{
+    fontSize: 25,
+    lineHeight: 24,
+    textAlign: 'center',
+    fontWeight:"bold",
+  },
   getStartedText: {
     fontSize: 17,
     lineHeight: 24,
     textAlign: 'center',
+    
   },
   helpContainer: {
     marginTop: 15,

@@ -1,10 +1,11 @@
-import { StyleSheet,ActivityIndicator,FlatList, Appearance } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet,ActivityIndicator,FlatList, Appearance, TextInput, Button} from 'react-native';
 
 // import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 // import { RootTabScreenProps } from '../types';
-import { gql,useQuery } from '@apollo/client';
+import { gql,useLazyQuery,useQuery } from '@apollo/client';
 import BookItem from '../components/BookItem';
 //  useQuery is used get data The useQuery hook is a React hook that shares GraphQL data with your UI.
  
@@ -49,9 +50,12 @@ const query = gql`
 
 // flatlist is used to render the array of elements  its like map function 
 
+// the main problem of using usequery is it sends request for every bit change which is heavy load and not optimal 
+// use -> useLazyQuery it sends only when the function changes  
 
 export default function TabOneScreen() {
-  const {data,loading,error}=useQuery(query,{variables:{q:"React Native"},});
+  const [serach,setSearch]=useState(" ")
+  const [ runQuery,{data,loading,error}]=useLazyQuery(query);
   // console.log(data);
   // console.log(loading);
   // console.log(error);
@@ -76,6 +80,28 @@ const istheme=()=>{
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TextInput
+        value={serach}
+        onChangeText={setSearch}
+        placeholder='Search.'
+         placeholderTextColor={
+            istheme()?"gray":"black"
+         }
+         style={[styles.input,
+        {
+          borderColor:istheme()?"gray":"black",
+          color:istheme()?"white":"black"
+        }]}/>
+        <Button title="Search"
+        color={
+          istheme()?"gray":"lightlack"
+        }
+        
+         accessibilityLabel="Please Search"
+         onPress={()=>runQuery({ variables: { q: serach } })}
+         />
+      </View>
       {
         loading && <ActivityIndicator size="large" color={
           istheme()?"white":"blue"
@@ -95,10 +121,10 @@ const istheme=()=>{
         image: item.volumeInfo.imageLinks?.thumbnail,
         title: item.volumeInfo.title,
         authors: item.volumeInfo.authors,
-        isbn:item.volumeInfo.industryIdentifiers[0].identifier,}}/>)}
+        isbn:item.volumeInfo.industryIdentifiers?.[0]?.identifier,}}/>)}
       
+       showsVerticalScrollIndicator={false}
       />
-      
     </View>
   );
 }
@@ -123,5 +149,18 @@ const styles = StyleSheet.create({
     alignContent:"center",
     justifyContent:"center",
     alignItems:"center"
-  }
+  },
+  header:{
+    flexDirection:"row",
+    alignItems:"center"
+  },
+  input:{
+    flex:1,
+    padding:5,
+    borderWidth:1,
+    borderRadius:5,
+    marginVertical:4,
+    marginRight:3
+  },
+
 });

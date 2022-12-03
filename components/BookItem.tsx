@@ -52,20 +52,20 @@ const styles = StyleSheet.create({
   },
   image: {
     height:100,
-    width:100,
+    width:"100%",
     flex: 1,
     aspectRatio: 2.1 / 3, 
     marginRight: 10,
-    borderWidth:1.5,
+    borderWidth:1.9,
     // borderColor:"black",
     borderStyle:'solid',
     borderRadius:5,
-    resizeMode:"contain"
+    resizeMode:"contain",
   },
   contentContainer: {
     flex: 4,
-    borderColor: "lightgray",
-    borderBottomWidth: 0.8,
+    borderColor: "gray",
+    borderBottomWidth: 0.9,
   },
   title: {
     fontSize: 18,
