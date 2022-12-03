@@ -20,33 +20,28 @@ export default function EditScreenInfo({ path }: { path: string }) {
           style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
           darkColor="rgba(255,255,255,0.05)"
           lightColor="rgba(0,0,0,0.05)">
-          <MonoText>{path}</MonoText>
+          {/* <MonoText>{path}</MonoText> */}
         </View>
 
         <Text
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
           darkColor="rgba(255,255,255,0.8)">
-          Change any of the text, save the file, and your app will automatically update.
+          Readme📖 Helps you to findout books you want to read.
         </Text>
       </View>
 
       <View style={styles.helpContainer}>
-        <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
+        
           <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-            Tap here if your app doesn't automatically update after making changes
+            App Made By ~PNB🧑‍💻
           </Text>
-        </TouchableOpacity>
+      
       </View>
     </View>
   );
 }
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet'
-  );
-}
 
 const styles = StyleSheet.create({
   getStartedContainer: {
@@ -82,5 +77,9 @@ const styles = StyleSheet.create({
   },
   helpLinkText: {
     textAlign: 'center',
+    marginTop:20,
+    fontSize:15,
+    fontWeight:"bold",
+    fontStyle:"italic"
   },
 });
