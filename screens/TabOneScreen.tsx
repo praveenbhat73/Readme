@@ -54,7 +54,25 @@ const query = gql`
 // use -> useLazyQuery it sends only when the function changes  
 
 export default function TabOneScreen() {
-  const [serach,setSearch]=useState(" ")
+  const [serach,setSearch]=useState(" ");
+  const[provider,setprovider]=useState<"googleBooksSearch"|"openLibrarySearch">("googleBooksSearch")
+  const parseBook = (item:any) => {
+    if (provider === "googleBooksSearch") {
+      return {
+        title: item.volumeInfo.title,
+        image: item.volumeInfo.imageLinks?.thumbnail,
+        authors: item.volumeInfo.authors,
+        isbn: item.volumeInfo.industryIdentifiers?.[0]?.identifier,
+      };
+    } else {
+      return {
+        title: item.title,
+        authors: item.author_name,
+        image: `https://covers.openlibrary.org/b/olid/${item.cover_edition_key}-M.jpg`,
+        isbn: item.isbn?.[0],
+      };
+    }
+  };
   const [ runQuery,{data,loading,error}]=useLazyQuery(query);
   // console.log(data);
   // console.log(loading);
@@ -102,6 +120,18 @@ const istheme=()=>{
          onPress={()=>runQuery({ variables: { q: serach } })}
          />
       </View>
+         <View style={styles.tabs}>
+          <Text style={provider==="googleBooksSearch"?{
+            fontWeight:"bold",color:"royalblue"
+          }:{}}
+          onPress={()=>setprovider("googleBooksSearch")}
+          >Google Books</Text>
+          <Text style={provider==="openLibrarySearch"?{
+            fontWeight:"bold",color:"royalblue"
+          }:{}}
+          onPress={()=>setprovider("openLibrarySearch")}
+          >Open Library</Text>
+         </View>
       {
         loading && <ActivityIndicator size="large" color={
           istheme()?"white":"blue"
@@ -116,15 +146,15 @@ const istheme=()=>{
           <Text>{error.message}</Text>
         </>
       }
-      <FlatList data={data?.googleBooksSearch?.items || []}
-      renderItem={({item})=>(<BookItem book={{
-        image: item.volumeInfo.imageLinks?.thumbnail,
-        title: item.volumeInfo.title,
-        authors: item.volumeInfo.authors,
-        isbn:item.volumeInfo.industryIdentifiers?.[0]?.identifier,}}/>)}
-      
-       showsVerticalScrollIndicator={false}
-      />
+   <FlatList
+  data={
+    provider === "googleBooksSearch"
+      ? data?.googleBooksSearch?.items
+      : data?.openLibrarySearch?.docs || []
+  }
+  renderItem={({ item }) => <BookItem book={parseBook(item)} />}
+  showsVerticalScrollIndicator={false}
+/>
     </View>
   );
 }
@@ -162,5 +192,11 @@ const styles = StyleSheet.create({
     marginVertical:4,
     marginRight:3
   },
+tabs:{
+  flexDirection:"row",
+  justifyContent:"space-around",
+  alignItems:"center",
+  height:50,
 
+},
 });
