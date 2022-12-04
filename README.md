@@ -4,7 +4,10 @@
 # stepzen start -> run this command and open the link in local host //has to be done otherwise shows error not connected
 # after this setup run the npm start 
 #Screen shot -> 
+
 Dark Mode :-
+
+
 ![lib2](https://user-images.githubusercontent.com/108626052/205481916-9bd524f6-dc20-4119-8b81-e43a3123513f.jpg)
 
 
